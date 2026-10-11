@@ -6,7 +6,7 @@ echo ""
 
 # Obtener datos del sistema mediante comandos de Linux
 HOSTNAME=$(hostname)
-IPS=$(ip -4 addr show | grep -oP '(?<=inet\s)\d+(\.\d+){3}' | grep -v '127.0.0.1')
+IPS=$(hostname -I 2>/dev/null || /usr/sbin/ip -4 addr show | awk '/inet / {print $2}' | cut -d/ -f1 | grep -v '127.0.0.1')
 
 # Generar el HTML
 cat <<EOF
