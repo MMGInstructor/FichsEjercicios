@@ -1,6 +1,6 @@
 #/bin/bash
 # Script de configuracion de simulacro de examen 1
-# Last Update: 14-Octubre-2026
+# Last Update: 15-Octubre-2026
 
 # El script se debe ejecutar en server0 como root
 
@@ -34,8 +34,10 @@ echo "Desplegando servidor NFS"
 dnf install nfs-utils -y &> /dev/null
 mkdir -p /exports/{pepe,nfsshare}
 chown 2233 /exports/pepe; chmod 700 /exports/pepe
+echo "Esto es el home de pepe" > /exports/pepe/hola.txt
 echo '/exports/pepe *(rw,sync,no_root_squash)' >> /etc/exports
 echo '/exports/nfsshare *(rw,sync,no_root_squash)' >> /etc/exports
+echo "Bienvenido al servidor NFS de server0" >> /exports/nfsshare/saludo.txt
 systemctl enable --now nfs-server &> /dev/null
 firewall-cmd --add-service=nfs --permanent &> /dev/null && firewall-cmd --reload &> /dev/null
 	
@@ -49,6 +51,11 @@ echo -e "<Directory \"/html\">\n  Require all granted\n</Directory>" >> /etc/htt
 mkdir /html
 echo "Bienvenido a server0" > /html/index.html
 
+
+echo "Creando usuario pedro"
+useradd -c "Pedro Lopez" pedro
+echo "redhat123" | passwd --stdin pedro
+echo "FIN inicialización de server0"
 exit
 
   
